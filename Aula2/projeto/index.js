@@ -4,7 +4,7 @@ const extract = require('extract-zip');
 const fs = require('fs');
 
 if(process.argv.length != 5){
-    console.log('Uso: node index.js <mode> <origem> <destino>');
+    console.log('Uso: node index.js <modo> <origem> <destino>');
     process.exit(-1);
 }
 
@@ -23,6 +23,8 @@ else if(process.argv[2] === "descompactar")
 function compactar(origem, destino){
     let compactador = archiver('zip');
 
+    let fd = fs.openSync(destino, 'w');
+
     let saida = fs.createWriteStream(destino);
 
     saida.on('close', () => {
@@ -33,13 +35,15 @@ function compactar(origem, destino){
 
     compactador.pipe(saida);
 
-    process.chdir(origem);
-    compactador.directory(process.cwd());
+    compactador.directory(origem);
 
     compactador.finalize();
+
+    fs.close(fd);
 }
 function descompactar(origem, destino){
-    extract(origem, {dir : __dirname + '/' + destino}, (err) => {
+    console.log(origem + " " + destino);
+    extract(origem, {dir : destino}, (err) => {
         if(err){
             console.log(err.name + ":" + err.message);
         }
