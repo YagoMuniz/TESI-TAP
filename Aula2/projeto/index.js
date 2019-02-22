@@ -15,9 +15,11 @@ const destino = process.argv[4];
 if(process.argv[2] === "compactar"){
     compactar(origem, destino);
 }
-else if(process.argv[2] === "descompactar")
-{
+else if(process.argv[2] === "descompactar"){
     descompactar(origem, destino);
+}
+else{
+    console.log("Parâmetros inválidos\nUse: 'compactar' ou 'descompactar'");
 }
 
 function compactar(origem, destino){
