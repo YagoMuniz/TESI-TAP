@@ -42,7 +42,6 @@ function compactar(origem, destino){
     fs.close(fd);
 }
 function descompactar(origem, destino){
-    console.log(origem + " " + destino);
     extract(origem, {dir : destino}, (err) => {
         if(err){
             console.log(err.name + ":" + err.message);
