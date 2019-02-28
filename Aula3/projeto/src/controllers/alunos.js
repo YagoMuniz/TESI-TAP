@@ -8,12 +8,11 @@ router.get('/', (req, res) => {
 });
 router.get('/:id', (req, res) => res.json(alunosRepo.recuperar(parseInt(req.params.id))));
 router.post('/', (req, res) => {
-    seguranca.autorizaJWT(req, res);
-    let userJson = JSON.stringify(req.body);
-    let user = JSON.parse(userJson);
-    console.log(user);
-    if(res.statusCode === 200 && user.roles.contains('ADMIN') > -1){
+    let result = seguranca.autorizaJWT(req, res);
+    console.log(result);
+    if(result.payload.roles.indexOf('ADMIN') > -1){
         res.json(alunosRepo.adicionar(req.body));
+        console.log(res);
     }
 });
 router.put('/:id', (req, res) => {
