@@ -6,14 +6,14 @@ const seguranca = require('../util/seguranca');
 router.get('/', (req, res) => {
     res.json(alunosRepo.todos())
 });
-router.get('/:id', (req, res) => res.json(alunosRepo.recuperar(parseInt(req.params.id))));
+router.get('/:matricula', (req, res) => res.json(alunosRepo.recuperar(req.params.matricula)));
 router.post('/', (req, res) => {
-    let result = seguranca.autorizaJWT(req, res);
-    console.log(result);
-    if(result.payload.roles.indexOf('ADMIN') > -1){
+    let result = seguranca.autorizaJWT(req, res, ()=>{ console.log("Ok") });
+    let user = req.user;
+    if(user.roles.includes("ADMIN"))
         res.json(alunosRepo.adicionar(req.body));
-        console.log(res);
-    }
+    else
+        res.sendStatus(401);
 });
 router.put('/:id', (req, res) => {
     res.json(alunosRepo.alterar(parseInt(req.params.id), req.body));

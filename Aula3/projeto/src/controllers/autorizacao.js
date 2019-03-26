@@ -15,14 +15,14 @@ router.post('/login', (req, res) => {
         
     } else if(req.body.username === 'user' && req.body.password === 'user'){
         payload = {
-            username : 'admin',
+            username : 'user',
             roles: ['USER'],
             email : 'user@email.com'
         };
     }
     
     if(payload){
-        var token = jwt.sign({ payload }, constantes.JWT_SECRET, { expiresIn: 300 });
+        var token = jwt.sign({ payload }, constantes.JWT_SECRET, { expiresIn: 3000 });
         res.status(200).send({ auth : true, token: token, user: payload });
     }else{
         res.status(500).send('Login inválido!');
