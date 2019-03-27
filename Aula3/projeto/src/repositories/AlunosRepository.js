@@ -14,28 +14,27 @@ const AlunosRepository = {
         };
         let dado = JSON.stringify(novo);
         fs.appendFile("db.json", dado + "\n", (err) => {
-            if (err)
-                return console.log("Falha ao salvar dados de aluno no banco.");
+            if (err) return console.log("Falha ao salvar dados de aluno no banco.");
         });
 
         return novo;
     },
     recuperar: matricula => {
-        let result = [];
-        var reader = require('readline').createInterface({
-            input: require('fs').createReadStream('db.json')
+        var aluno;
+        fs.readFile(__dirname + "/DB/db.json", 'utf-8', (err, content) => {
+            if(err) return console.log(err);  
+            let lin = content.split('\n');
+            return lin.filter((value) => {
+                if(value){
+                    let alun = JSON.parse(value);
+                    if(alun.matricula === matricula){
+                        aluno = alun;
+                        return;
+                    }
+                }
+            });
         });
-
-        reader.on('line', (line) => {
-            result.push(line);
-        });
-
-        reader.on('close', () => {
-            return result.find(a => a.matricula === matricula);
-
-        })
-
-        
+        return aluno;
     },
     alterar: (id, novo) => {
         novo.id = id;
